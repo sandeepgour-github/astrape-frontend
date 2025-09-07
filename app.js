@@ -1,5 +1,5 @@
 // Configuration
-const API_BASE_URL = "http://localhost:8085/api";
+const API_BASE_URL = "https://astrapestore.onrender.com/api";
 let currentUser = null;
 let authToken = null;
 let currentPage = "products";
