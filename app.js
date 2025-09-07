@@ -1,11 +1,11 @@
 // Configuration
-const API_BASE_URL = "http://localhost:8082/api";
+const API_BASE_URL = "https://astrapestore.onrender.com/api";
 let currentUser = null;
 let authToken = null;
 let currentPage = "products";
 let cartItems = [];
 let allProducts = [];
-let pendingAddToCart = null; // remember user's intent when not logged in
+let pendingAddToCart = null;
 
 // Utility Functions
 function showToast(message, type = "info") {
@@ -22,18 +22,15 @@ function formatPrice(price) {
 }
 
 function showPage(pageName) {
-  // Hide all pages
   document.querySelectorAll(".page").forEach((page) => {
     page.style.display = "none";
   });
 
-  // Show selected page
   const targetPage = document.getElementById(`${pageName}-page`);
   if (targetPage) {
     targetPage.style.display = "block";
     currentPage = pageName;
 
-    // Update navigation active class (if you use it)
     document.querySelectorAll(".nav-link").forEach((link) => {
       link.classList.remove("active");
     });
@@ -53,7 +50,7 @@ function showPage(pageName) {
   }
 }
 
-// Authentication Functions
+// login
 async function login(email, password) {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -79,11 +76,9 @@ async function login(email, password) {
       updateAuthUI();
       syncCartFromStorage();
 
-      // If user wanted to add an item before login, do it now
       if (pendingAddToCart) {
         const { itemId, quantity } = pendingAddToCart;
         pendingAddToCart = null;
-        // addToCart uses authToken variable, which is already set above
         await addToCart(itemId, quantity);
       }
 
@@ -207,7 +202,6 @@ async function loadCategories() {
   }
 }
 
-// Rewritten to avoid disabled-click issue and attach correct handlers
 function renderProducts(products) {
   const productsGrid = document.getElementById("products-grid");
   if (!productsGrid) return;
@@ -261,12 +255,10 @@ function renderProducts(products) {
     const btn = document.createElement("button");
     btn.className = "btn btn-primary btn-full";
 
-    // If out of stock -> disable
     if (product.stock === 0) {
       btn.disabled = true;
       btn.textContent = "Out of Stock";
     } else {
-      // If not logged in -> redirect to login (do not disable button)
       if (!currentUser) {
         btn.textContent = "Login to Add to Cart";
         btn.addEventListener("click", () => redirectToLogin(product.id));
@@ -334,7 +326,6 @@ function clearFilters() {
   updateProductsCount(allProducts.length);
 }
 
-// When user is not logged in, call this to redirect to login and remember intent
 function redirectToLogin(itemId, quantity = 1) {
   pendingAddToCart = { itemId, quantity };
   showToast("Please login to add items to cart", "info");
@@ -347,11 +338,9 @@ function redirectToLogin(itemId, quantity = 1) {
 
 // Cart Functions
 async function addToCart(itemId, quantity = 1) {
-  // ensure authToken from localStorage if page reload
   authToken = authToken || localStorage.getItem("authToken");
 
   if (!authToken) {
-    // use redirect flow to remember user intent
     redirectToLogin(itemId, quantity);
     return;
   }
@@ -547,7 +536,7 @@ async function clearCart() {
   }
 }
 
-// Checkout (calls backend endpoint /api/cart/checkout)
+// Checkout
 async function checkoutCart() {
   authToken = authToken || localStorage.getItem("authToken");
   if (!authToken || cartItems.length === 0) {

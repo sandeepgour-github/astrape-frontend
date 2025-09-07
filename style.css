@@ -1,4 +1,3 @@
-/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -158,7 +157,6 @@ body {
   }
 }
 
-/* Auth Pages */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -231,7 +229,6 @@ body {
   font-weight: 600;
 }
 
-/* Products Page */
 .products-container {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -363,7 +360,6 @@ body {
   color: #dc3545;
 }
 
-/* Cart Page */
 .cart-container {
   background: white;
   border-radius: 12px;
@@ -487,7 +483,6 @@ body {
   margin-top: 2rem;
 }
 
-/* Loading and States */
 .loading {
   text-align: center;
   padding: 4rem;
@@ -495,7 +490,6 @@ body {
   font-size: 1.1rem;
 }
 
-/* Toast Notifications */
 .toast {
   position: fixed;
   top: 100px;
@@ -583,7 +577,6 @@ body {
     grid-template-columns: 1fr;
   }
 }
-/* Logout, Clear Filter, Checkout visibility */
 .btn-logout,
 .btn-clear,
 .btn-checkout {
@@ -599,7 +592,6 @@ body {
   text-decoration: none;
 }
 
-/* Logout button - danger style */
 .btn-logout {
   background-color: #ff4757;
   color: #fff !important;
@@ -612,7 +604,6 @@ body {
   transform: scale(1.03);
 }
 
-/* Clear Filters - outline style */
 .btn-clear {
   background: transparent;
   border: 2px solid #667eea;
@@ -621,11 +612,10 @@ body {
 
 .btn-clear:hover {
   background-color: #667eea;
-  color: #fff !important; /* text stays white on hover */
+  color: #fff;
   transform: scale(1.03);
 }
 
-/* Checkout - primary style */
 .btn-checkout {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff !important;
@@ -638,10 +628,9 @@ body {
 .btn-checkout:hover {
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
   transform: translateY(-2px);
-  color: #fff !important; /* ensures text stays visible */
+  color: #fff !important;
 }
 
-/* === CLICK ANIMATION === */
 .btn-logout:active,
 .btn-clear:active,
 .btn-checkout:active {
