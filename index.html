@@ -50,6 +50,8 @@
           <div class="auth-card">
             <h2>Welcome Back</h2>
             <p>Sign in to your account</p>
+
+            <!-- Traditional Login Form -->
             <form id="login-form">
               <div class="form-group">
                 <label for="login-email">Email</label>
@@ -63,6 +65,30 @@
                 Sign In
               </button>
             </form>
+
+            <!-- Divider -->
+            <div class="divider">
+              <span>or</span>
+            </div>
+
+            <!-- OAuth2 Login Buttons -->
+            <div class="oauth2-buttons">
+              <button
+                onclick="loginWithGoogle()"
+                class="btn btn-oauth google-btn"
+              >
+                <i class="fab fa-google"></i>
+                Continue with Google
+              </button>
+              <button
+                onclick="loginWithGitHub()"
+                class="btn btn-oauth github-btn"
+              >
+                <i class="fab fa-github"></i>
+                Continue with GitHub
+              </button>
+            </div>
+
             <p class="auth-switch">
               Don't have an account?
               <a href="#" onclick="showPage('signup')">Sign up here</a>

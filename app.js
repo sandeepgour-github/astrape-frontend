@@ -1,5 +1,6 @@
 // Configuration
-const API_BASE_URL = "https://astrapestore.onrender.com/api";
+//const API_BASE_URL = "https://astrapestore.onrender.com/api";
+const API_BASE_URL = "http://localhost:8085/api";
 let currentUser = null;
 let authToken = null;
 let currentPage = "products";
@@ -164,6 +165,92 @@ function updateAuthUI() {
   } else {
     if (authButtons) authButtons.style.display = "flex";
     if (userMenu) userMenu.style.display = "none";
+  }
+}
+
+// OAuth2 Functions
+function loginWithGoogle() {
+  console.log("Initiating Google OAuth2 login...");
+  window.location.href = `${API_BASE_URL.replace(
+    "/api",
+    ""
+  )}/oauth2/authorization/google`;
+}
+
+function loginWithGitHub() {
+  console.log("Initiating GitHub OAuth2 login...");
+  window.location.href = `${API_BASE_URL.replace(
+    "/api",
+    ""
+  )}/oauth2/authorization/github`;
+}
+
+// Handle OAuth2 redirect
+function handleOAuth2Redirect() {
+  console.log("Handling OAuth2 redirect...");
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const error = urlParams.get("error");
+  const email = urlParams.get("email");
+  const firstName = urlParams.get("firstName");
+  const lastName = urlParams.get("lastName");
+  const userId = urlParams.get("userId");
+
+  console.log("OAuth2 redirect params:", {
+    token: !!token,
+    error,
+    email,
+    firstName,
+    lastName,
+    userId,
+  });
+
+  if (error) {
+    console.error("OAuth2 error:", error);
+    showToast("OAuth2 login failed: " + error, "error");
+    showPage("login");
+    return;
+  }
+
+  if (token && email && firstName && lastName && userId) {
+    console.log("OAuth2 login successful, storing user data...");
+
+    // Store OAuth2 user data
+    currentUser = {
+      id: parseInt(userId),
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+    };
+    authToken = token;
+
+    // Store in localStorage for persistence
+    localStorage.setItem("authToken", authToken);
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+    updateAuthUI();
+    syncCartFromStorage();
+    showPage("products");
+    showToast("Login successful!", "success");
+
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+    console.warn("OAuth2 redirect missing required parameters");
+    showPage("login");
+  }
+}
+
+// Load OAuth2 providers dynamically
+async function loadOAuth2Providers() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/oauth2/providers`);
+    if (response.ok) {
+      const providers = await response.json();
+      console.log("Available OAuth2 providers:", providers);
+    }
+  } catch (error) {
+    console.error("Error loading OAuth2 providers:", error);
   }
 }
 
