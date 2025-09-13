@@ -641,7 +641,7 @@ async function checkoutCart() {
       cartItems = [];
       renderCart();
       updateCartCount();
-      showToast("🎉 Order placed successfully!", "success");
+      showToast("Order placed successfully!", "success");
       showPage("products");
     } else {
       const msg = await response.text().catch(() => null);
