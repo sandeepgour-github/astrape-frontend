@@ -717,6 +717,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Automatically check for OAuth2 redirect when the page loads
+window.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname === "/oauth2/redirect") {
+    console.log("Detected /oauth2/redirect page, handling redirect...");
+    handleOAuth2Redirect();
+  }
+});
+
 window.addEventListener("error", function (e) {
   console.error("Global error:", e.error);
   showToast("An unexpected error occurred", "error");
